@@ -49,7 +49,7 @@ if st.button("Show"):
 
             # Show the result
             st.subheader(f"Courses currently taken by Student ID {student_id}:")
-            st.dataframe(student_courses[['Mata Kuliah', 'IKM Sudah Terisi']])
+            st.dataframe(student_courses[['Matakuliah', 'IKM Sudah Terisi']])
         else:
             st.warning(f"No courses found for Student ID {student_id}")
     else:
