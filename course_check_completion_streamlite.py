@@ -30,7 +30,7 @@ def load_data():
     return course_database, response_data
 
 # Streamlit UI
-st.title("Student Course Dashboard")
+st.title("Cek Kelengkapan Pengisian Survei")
 student_id = st.text_input("Enter your Student ID:")
 
 if st.button("Show"):
