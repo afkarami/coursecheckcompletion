@@ -31,19 +31,20 @@ if st.button("Show"):
 
         # Filter for the student's courses
         student_courses = course_database[course_database['NIM'] == student_id]
+        student_responses = response_data[response_data['NIM'] == student_id]  # Filter response_data by student_id
 
         if not student_courses.empty:
             # Check if the courses are filled in response data
             student_courses['IKM Sudah Terisi'] = student_courses['Matakuliah'].apply(
-                lambda x: 'Sudah' if response_data['Nama mata kuliah yang diampu sesuai nama dosen yang dipilih sebelumnya'].str.contains(x, na=False).any() else 'Belum'
+                lambda x: 'Sudah' if x in student_responses['Nama mata kuliah yang diampu sesuai nama dosen yang dipilih sebelumnya'].values else 'Belum'
             )
 
             # Debugging outputs
             st.write("Debug: Student Courses DataFrame")
             st.dataframe(student_courses)
 
-            st.write("Debug: Response DataFrame")
-            st.dataframe(response_data)
+            st.write("Debug: Filtered Response DataFrame (Current Student Only)")
+            st.dataframe(student_responses)
 
             # Show the result
             st.subheader(f"Courses currently taken by Student ID {student_id}:")
