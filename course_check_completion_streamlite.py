@@ -15,14 +15,14 @@ def load_data():
     response_data['Nama mata kuliah yang diampu sesuai nama dosen yang dipilih sebelumnya'] = response_data['Nama mata kuliah yang diampu sesuai nama dosen yang dipilih sebelumnya'].str.strip().str.lower()
 
     # Ensure NIM columns are of the same type for comparison
-    course_database['NIM'] = course_database['NIM'].astype(str)  # Ensure it's a string for comparison
-    response_data['NIM'] = response_data['NIM'].astype(str)  # Ensure it's a string for comparison
+    course_database['NIM'] = course_database['NIM'].astype(str)
+    response_data['NIM'] = response_data['NIM'].astype(str)
 
     return course_database, response_data
 
 # Streamlit UI
 st.title("Cek Kelengkapan Pengisian Survei")
-student_id = st.text_input("Enter your Student ID:")
+student_id = st.text_input("Masukkan NIM anda:")
 
 if st.button("Show"):
     if student_id:
@@ -31,25 +31,35 @@ if st.button("Show"):
 
         # Filter for the student's courses
         student_courses = course_database[course_database['NIM'] == student_id]
-        student_responses = response_data[response_data['NIM'] == student_id]  # Filter response_data by student_id
+
+        # Filter for the student's responses
+        response_data_filtered = response_data[response_data['NIM'] == student_id]
+
+        # Debug: Uncomment these lines if you want to check the data during debugging
+        # st.write("Debug: Course Database DataFrame", course_database)
+        # st.write("Debug: Response DataFrame", response_data)
+        # st.write("Debug: Filtered Response DataFrame", response_data_filtered)
 
         if not student_courses.empty:
             # Check if the courses are filled in response data
             student_courses['IKM Sudah Terisi'] = student_courses['Matakuliah'].apply(
-                lambda x: 'Sudah' if x in student_responses['Nama mata kuliah yang diampu sesuai nama dosen yang dipilih sebelumnya'].values else 'Belum'
+                lambda x: 'Sudah' if x in response_data_filtered['Nama mata kuliah yang diampu sesuai nama dosen yang dipilih sebelumnya'].values else 'Belum'
             )
 
-            # Debugging outputs
-            st.write("Debug: Student Courses DataFrame")
-            st.dataframe(student_courses)
+            # Apply color formatting for the 'IKM Sudah Terisi' column
+            def color_label(val):
+                return 'color: red' if val == 'Belum' else ''
 
-            st.write("Debug: Filtered Response DataFrame (Current Student Only)")
-            st.dataframe(student_responses)
+            styled_data = student_courses[['Matakuliah', 'IKM Sudah Terisi']].style.applymap(color_label, subset=['IKM Sudah Terisi'])
 
             # Show the result
-            st.subheader(f"Courses currently taken by Student ID {student_id}:")
-            st.dataframe(student_courses[['Matakuliah', 'IKM Sudah Terisi']])
+            st.subheader(f"Berikut Hasil Pengisian Survey oleh NIM: {student_id}")
+            st.dataframe(styled_data)
         else:
             st.warning(f"No courses found for Student ID {student_id}")
     else:
         st.warning("Please enter a valid Student ID.")
+
+# Add informational message
+st.write("---")
+st.info("Apabila anda merasa sudah mengisi namun tidak muncul, maka anda salah menginputkan NIM saat pengisian")
