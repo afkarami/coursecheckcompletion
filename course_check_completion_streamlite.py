@@ -4,7 +4,7 @@ import pandas as pd
 # Function to load and clean data
 def load_data():
     DATABASE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTMvqtDGEsFiviYP0gOt-4oX0lgNj0y-kXtGxWrSqh0L1hBQ8XwZlUS6wtbUegI6RPmihvYkiVTeDtE/pub?gid=0&single=true&output=csv"
-    RESPONSE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzFjCOyt01_IM2k6QZujhDTMhDtFtKmjBOWdsK2Q2z1AdA1egyJ1yM5nTZlonOUnvgqlLkjwDSwRMx/pub?gid=0&single=true&output=csv"
+    RESPONSE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRhG34LYzkc-urSC1iMxv0bNP1fXQ0wb7HmGFppmQcoukxdSp6Bpx4ARGm9PPD20bclCN65ybGhQo4E/pub?gid=0&single=true&output=csv"
 
     # Load both course database and response data
     course_database = pd.read_csv(DATABASE_SHEET_URL)
